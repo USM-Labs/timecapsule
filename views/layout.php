@@ -83,7 +83,7 @@ $navLink = function (string $key, string $href, string $label) use ($nav): strin
   <div class="container">
     <?php /* Shows which machine answered, which database host it uses and where files are stored. */ ?>
     Served by <code><?= e(gethostname()) ?></code> · DB: <code><?= e(config('DB_HOST', 'localhost')) ?></code> · Files: <code>local disk (<?= e(config('UPLOAD_DIR', 'storage/uploads')) ?>)</code>
-    <br>Lab 02 · Amazon EC2 · Автор: Splavski Maxim
+    <br>Lab 02 · Amazon EC2 · Автор: Splavski Maxim<br>LR3 · Amazon VPC · app-server в timecapsule-dev-vpc, база в private-a
   </div>
 </footer>
 
