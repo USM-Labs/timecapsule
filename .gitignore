@@ -5,3 +5,6 @@
 /storage/sessions/*
 !/storage/sessions/.gitkeep
 /storage/*.log
+
+# NAT Gateway state written by scripts/nat-up.sh
+/scripts/nat-state.env
