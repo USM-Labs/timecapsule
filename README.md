@@ -8,6 +8,7 @@
 - **Вариант деплоя:** B - скрипт [`deploy.sh`](deploy/deploy.sh), запускаемый со своего компьютера по SSH
 - **Репозиторий:** https://github.com/USM-Labs/timecapsule (публичный, организация `USM-Labs`)
 - **ADR:** [docs/adr/0001-deploy-method.md](docs/adr/0001-deploy-method.md)
+- **Отчёт ЛР3 (Amazon VPC):** [docs/lab3/README.md](docs/lab3/README.md)
 
 Ресурсы AWS (регион `eu-central-1`, аккаунт `697194708124`, IAM-пользователь `maxsplavski_student` в группе `Admins`):
 
