@@ -9,6 +9,7 @@
 - **Репозиторий:** https://github.com/USM-Labs/timecapsule (публичный, организация `USM-Labs`)
 - **ADR:** [docs/adr/0001-deploy-method.md](docs/adr/0001-deploy-method.md)
 - **Отчёт ЛР3 (Amazon VPC):** [docs/lab3/README.md](docs/lab3/README.md)
+- **Отчёт ЛР4 (Amazon S3):** [docs/lab4/README.md](docs/lab4/README.md)
 
 Ресурсы AWS (регион `eu-central-1`, аккаунт `697194708124`, IAM-пользователь `maxsplavski_student` в группе `Admins`):
 
