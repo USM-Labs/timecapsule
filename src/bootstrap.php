@@ -42,10 +42,27 @@ if (PHP_SAPI !== 'cli') {
     });
 }
 
-// Sessions are plain files in storage/sessions/.
+// Sessions live in the DynamoDB table SESSIONS_TABLE (LR6), so any app server behind the
+// load balancer can serve any request. Without SESSIONS_TABLE (local Docker) they stay
+// plain files in storage/sessions/. Credentials come from the instance role, not from .env.
 function start_session(): void
 {
-    session_save_path(ROOT_DIR . '/storage/sessions');
+    $table = config('SESSIONS_TABLE', '');
+    if ($table !== '') {
+        $client = new Aws\DynamoDb\DynamoDbClient([
+            'region' => config('AWS_REGION', 'eu-central-1'),
+            'version' => 'latest',
+        ]);
+        // Item key "id", expiry timestamp in "expires" (the table's TTL attribute).
+        Aws\DynamoDb\SessionHandler::fromClient($client, [
+            'table_name' => $table,
+            'hash_key' => 'id',
+            'session_lifetime_attribute' => 'expires',
+            'session_lifetime' => 3600,
+        ])->register();
+    } else {
+        session_save_path(ROOT_DIR . '/storage/sessions');
+    }
     session_name('timecapsule_session');
     session_set_cookie_params([
         'httponly' => true,
