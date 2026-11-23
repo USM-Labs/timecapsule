@@ -54,7 +54,10 @@ if ($path !== '/health') {
     start_session();
 
     // Open due capsules before any page is rendered, so pages always show the current state.
-    open_due_capsules();
+    // LR7: with EVENTS_TOPIC_ARN set, timecapsule-dev-opener does this once a minute instead.
+    if (!events_enabled()) {
+        open_due_capsules();
+    }
 }
 
 foreach ($routes as [$routeMethod, $pattern, $handler]) {

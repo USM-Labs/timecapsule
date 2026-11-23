@@ -37,6 +37,12 @@ CREATE TABLE IF NOT EXISTS notifications (
 
 CREATE INDEX IF NOT EXISTS notifications_user_id_idx ON notifications (user_id);
 
+-- LR7: kind = 'sealed' | 'opened'. One notification of each kind per capsule, so a message that
+-- SQS delivers twice cannot create a second notification (the mailer uses ON CONFLICT DO NOTHING).
+-- Rows written before LR7 have kind NULL and are not affected (NULLs never conflict).
+ALTER TABLE notifications ADD COLUMN IF NOT EXISTS kind VARCHAR(20);
+CREATE UNIQUE INDEX IF NOT EXISTS notifications_capsule_kind_key ON notifications (capsule_id, kind);
+
 -- Built-in "Guest" user, used when AUTH_ENABLED=false.
 -- The password hash is not a valid bcrypt hash, so nobody can log in as guest.
 INSERT INTO users (id, email, password_hash)

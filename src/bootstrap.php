@@ -31,6 +31,7 @@ require __DIR__ . '/csrf.php';
 require __DIR__ . '/auth.php';
 require __DIR__ . '/storage.php';
 require __DIR__ . '/mailer.php';
+require __DIR__ . '/events.php';
 require __DIR__ . '/capsules.php';
 require ROOT_DIR . '/views/partials/icons.php';
 

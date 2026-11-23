@@ -52,10 +52,25 @@ function capsules_store(): void
     $data['user_id'] = (int) $user['id'];
     $capsule = capsule_create($data);
 
-    // 3. "Send" the confirmation e-mail. This is the slow part of the request (see mailer.php).
-    $recipient = $capsule['recipient_email'] ?? $user['email'];
-    $text = sprintf('Capsule "%s" was sealed for you until %s.', $capsule['title'], format_utc($capsule['open_at']));
-    mail_send($capsule, $recipient, $text);
+    // 3. The confirmation e-mail.
+    if (events_enabled()) {
+        // LR7: publish capsule.sealed and answer at once; timecapsule-dev-mailer writes the
+        // notification. If SNS is unreachable the capsule is still saved, only the e-mail is lost.
+        try {
+            event_publish('capsule.sealed', [
+                'capsule_id' => (int) $capsule['id'],
+                'user_id' => (int) $capsule['user_id'],
+                'open_at' => to_utc($capsule['open_at'])->format('Y-m-d\TH:i:s\Z'),
+            ]);
+        } catch (Throwable $e) {
+            error_log('capsule.sealed publish failed for capsule ' . $capsule['id'] . ': ' . $e->getMessage());
+        }
+    } else {
+        // Without the topic (local Docker): "send" it inside the request (slow, see mailer.php).
+        $recipient = $capsule['recipient_email'] ?? $user['email'];
+        $text = sprintf('Capsule "%s" was sealed for you until %s.', $capsule['title'], format_utc($capsule['open_at']));
+        mail_send($capsule, $recipient, $text);
+    }
 
     flash('success', 'Capsule sealed.');
     redirect('/capsules/' . $capsule['id']);
